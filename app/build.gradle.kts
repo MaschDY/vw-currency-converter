@@ -1,12 +1,26 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
+val localProperties = Properties().apply {
+    val localPropertiesFile = project.rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(localPropertiesFile.inputStream())
+    }
+}
+val apiKey: String = localProperties.getProperty("EXCHANGERATE_API_KEY", "")
+
 android {
     namespace = "br.com.maschdy.vwcurrencyconverter"
     compileSdk = 36
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "br.com.maschdy.vwcurrencyconverter"
@@ -16,6 +30,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "EXCHANGERATE_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -59,4 +74,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.moshi)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.okhttp.logging.interceptor)
+
+    implementation(libs.koin.androidx.compose)
 }

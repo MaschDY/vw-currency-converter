@@ -32,19 +32,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import br.com.maschdy.vwcurrencyconverter.domain.model.currencyCodes
 import br.com.maschdy.vwcurrencyconverter.presentation.theme.VWCurrencyConverterTheme
 import br.com.maschdy.vwcurrencyconverter.presentation.utils.Screen
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConverterScreen(
     navController: NavController = rememberNavController(),
-    viewModel: ConverterViewModel = viewModel(),
-    fromOptions: List<String> = listOf("1", "2", "3"),
-    toOptions: List<String> = listOf("A", "B", "C"),
+    viewModel: ConverterViewModel = koinViewModel(),
+    fromOptions: List<String> = currencyCodes,
+    toOptions: List<String> = currencyCodes,
 ) {
     var value by remember { mutableStateOf("") }
     var actualCurrency by remember { mutableStateOf("") }
@@ -71,11 +72,11 @@ fun ConverterScreen(
         navController.navigate(Screen.HistoryScreen.route)
     }
 
-    fun getValidValue(input: String, previousVal: String): String {
+    fun getValidValue(input: String, previousInput: String): String {
         if (input.isEmpty()) return ""
 
-        val regex = Regex("^\\d+(,\\d{0,2})?$")
-        return if (regex.matches(input)) input else previousVal
+        val regex = Regex("^\\d+(\\.\\d{0,2})?$")
+        return if (regex.matches(input)) input else previousInput
     }
 
     Column(
@@ -111,7 +112,9 @@ fun ConverterScreen(
         OutlinedTextField(
             value = value,
             onValueChange = { input ->
-                value = getValidValue(input, value)
+                if (input.length <= 15) {
+                    value = getValidValue(input, value)
+                }
             },
             label = { Text("Valor") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -209,7 +212,8 @@ fun ConverterScreen(
             if (uiState.result.isNotEmpty()) {
                 Text(
                     text = uiState.result,
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(top = 16.dp)
                 )
             }
         }
