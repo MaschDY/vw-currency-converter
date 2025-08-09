@@ -41,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import br.com.maschdy.vwcurrencyconverter.domain.model.currencyCodes
 import br.com.maschdy.vwcurrencyconverter.presentation.theme.VWCurrencyConverterTheme
 import br.com.maschdy.vwcurrencyconverter.presentation.utils.Screen
+import br.com.maschdy.vwcurrencyconverter.presentation.viewModel.PrefDataStoreViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,16 +49,17 @@ import org.koin.androidx.compose.koinViewModel
 fun ConverterScreen(
     navController: NavController = rememberNavController(),
     viewModel: ConverterViewModel = koinViewModel(),
+    prefDataStoreViewModel: PrefDataStoreViewModel = koinViewModel(),
     fromOptions: List<String> = currencyCodes,
     toOptions: List<String> = currencyCodes,
-    onDarkThemeChange: (isDarkMode: Boolean) -> Unit = {}
 ) {
     var value by remember { mutableStateOf("") }
     var actualCurrency by remember { mutableStateOf("") }
     var targetCurrency by remember { mutableStateOf("") }
     var expandedActualCurrency by remember { mutableStateOf(false) }
     var expandedTargetCurrency by remember { mutableStateOf(false) }
-    var isDarkMode by remember { mutableStateOf(false) }
+    val preferences by prefDataStoreViewModel.preferences.collectAsState()
+    val isDarkMode = preferences.isDarkMode
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -103,8 +105,7 @@ fun ConverterScreen(
                     modifier = Modifier.padding(end = 6.dp),
                     checked = isDarkMode,
                     onCheckedChange = {
-                        isDarkMode = it
-                        onDarkThemeChange(isDarkMode)
+                        prefDataStoreViewModel.setDarkMode(it)
                     },
                     thumbContent = {
                         val icon = remember(isDarkMode) {

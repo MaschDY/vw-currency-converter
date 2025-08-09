@@ -81,4 +81,6 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
 
     implementation(libs.koin.androidx.compose)
+
+    implementation(libs.androidx.datastore.preferences)
 }
