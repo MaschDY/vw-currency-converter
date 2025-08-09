@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import br.com.maschdy.vwcurrencyconverter.domain.model.HistoryItem
 import br.com.maschdy.vwcurrencyconverter.presentation.theme.VWCurrencyConverterTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -91,14 +92,18 @@ fun HistoryScreen(
 
 @Composable
 fun HistoryList(items: List<Pair<String, String>>) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+    ) {
         LazyColumn {
             items(items) { item ->
-                HistoryItem(
-                    name = item.first,
-                    value = item.second
+                HistoryItemView(
+                    HistoryItem(
+                        name = item.first,
+                        value = item.second
+                    )
                 )
             }
         }

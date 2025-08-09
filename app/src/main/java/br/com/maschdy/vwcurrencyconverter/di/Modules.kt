@@ -1,5 +1,6 @@
 package br.com.maschdy.vwcurrencyconverter.di
 
+import br.com.maschdy.vwcurrencyconverter.data.datastore.HistoryDataStoreImpl
 import br.com.maschdy.vwcurrencyconverter.data.datastore.PrefDataStoreImpl
 import br.com.maschdy.vwcurrencyconverter.data.network.NetworkFactory.BASE_URL
 import br.com.maschdy.vwcurrencyconverter.data.network.NetworkFactory.createService
@@ -8,6 +9,7 @@ import br.com.maschdy.vwcurrencyconverter.data.network.NetworkFactory.provideMos
 import br.com.maschdy.vwcurrencyconverter.data.network.NetworkFactory.provideRetrofit
 import br.com.maschdy.vwcurrencyconverter.data.network.service.ConverterService
 import br.com.maschdy.vwcurrencyconverter.data.repository.ConverterRepositoryImpl
+import br.com.maschdy.vwcurrencyconverter.domain.datastore.HistoryDataStore
 import br.com.maschdy.vwcurrencyconverter.domain.datastore.PrefDataStore
 import br.com.maschdy.vwcurrencyconverter.domain.repository.ConverterRepository
 import br.com.maschdy.vwcurrencyconverter.presentation.converter.ConverterViewModel
@@ -26,6 +28,7 @@ val baseModules = module {
     single<ConverterService> { createService(get()) }
     single<ConverterRepository> { ConverterRepositoryImpl(get()) }
     single<PrefDataStore> { PrefDataStoreImpl(get()) }
+    single<HistoryDataStore> { HistoryDataStoreImpl(get()) }
 
     viewModelOf(::ConverterViewModel)
     viewModelOf(::HistoryViewModel)

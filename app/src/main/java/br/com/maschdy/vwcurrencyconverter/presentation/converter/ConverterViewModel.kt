@@ -2,8 +2,10 @@ package br.com.maschdy.vwcurrencyconverter.presentation.converter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.maschdy.vwcurrencyconverter.domain.datastore.HistoryDataStore
 import br.com.maschdy.vwcurrencyconverter.domain.model.Error
 import br.com.maschdy.vwcurrencyconverter.domain.model.Exception
+import br.com.maschdy.vwcurrencyconverter.domain.model.HistoryItem
 import br.com.maschdy.vwcurrencyconverter.domain.model.Success
 import br.com.maschdy.vwcurrencyconverter.domain.repository.ConverterRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +14,8 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class ConverterViewModel(
-    val repository: ConverterRepository
+    private val repository: ConverterRepository,
+    private val historyDataStore: HistoryDataStore
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ConverterUIState> = MutableStateFlow(ConverterUIState())
@@ -43,10 +46,13 @@ class ConverterViewModel(
             is Success -> {
                 val query = response.data.query
                 val result = response.data.result
-                _uiState.value.copy(
-                    result = "${"%.2f".format(query.amount)} ${query.from} vale " +
-                            "${"%.2f".format(result)} ${query.to}"
-                )
+                val resultText = "${"%.2f".format(query.amount)} ${query.from} vale " +
+                        "${"%.2f".format(result)} ${query.to}"
+                val historyItem =
+                    HistoryItem(name = "${query.from}/${query.to}", value = resultText)
+                historyDataStore.saveItem(historyItem)
+
+                _uiState.value.copy(result = resultText)
             }
 
             is Error -> _uiState.value.copy(errorMessage = response.message)

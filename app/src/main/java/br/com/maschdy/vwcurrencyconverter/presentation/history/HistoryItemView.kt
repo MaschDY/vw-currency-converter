@@ -9,12 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import br.com.maschdy.vwcurrencyconverter.domain.model.HistoryItem
 import br.com.maschdy.vwcurrencyconverter.presentation.theme.VWCurrencyConverterTheme
 
 @Composable
-fun HistoryItem(
-    name: String,
-    value: String,
+fun HistoryItemView(
+    item: HistoryItem
 ) {
     Row(
         modifier = Modifier
@@ -22,14 +22,14 @@ fun HistoryItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = name,
+            text = item.name,
             modifier = Modifier.weight(1f),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
 
         Text(
-            text = value,
+            text = item.value,
             fontWeight = FontWeight.Bold
         )
     }
@@ -37,8 +37,8 @@ fun HistoryItem(
 
 @Preview(showBackground = true)
 @Composable
-fun HistoryItemPreview() {
+fun HistoryItemViewPreview() {
     VWCurrencyConverterTheme {
-        HistoryItem("BRL/USD", "R$100 - $100")
+        HistoryItemView(item = HistoryItem(name = "BRL/USD", value = "R$100 - $100"))
     }
 }
