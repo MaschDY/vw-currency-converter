@@ -21,6 +21,7 @@ import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -85,29 +86,24 @@ fun ConverterScreen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Conversor de Moedas",
-                style = MaterialTheme.typography.titleLarge
-            )
-
-            TextButton(
-                onClick = { onHistoryClick() },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.History,
-                    contentDescription = "Histórico",
-                    modifier = Modifier.padding(horizontal = 8.dp)
+        TopAppBar(
+            title = {
+                Text(
+                    text = "Conversor de Moedas",
+                    style = MaterialTheme.typography.titleLarge
                 )
-                Text(text = "Histórico")
+            },
+            actions = {
+                TextButton(onClick = { onHistoryClick() }) {
+                    Icon(
+                        imageVector = Icons.Default.History,
+                        contentDescription = "Histórico",
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Text(text = "Histórico")
+                }
             }
-        }
+        )
 
         OutlinedTextField(
             value = value,
