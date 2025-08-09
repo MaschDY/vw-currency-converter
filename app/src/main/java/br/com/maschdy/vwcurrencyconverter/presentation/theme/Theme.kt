@@ -1,6 +1,5 @@
-package br.com.maschdy.vwcurrencyconverter.ui.theme
+package br.com.maschdy.vwcurrencyconverter.presentation.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

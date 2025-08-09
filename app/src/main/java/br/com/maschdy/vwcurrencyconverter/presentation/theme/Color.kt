@@ -1,4 +1,4 @@
-package br.com.maschdy.vwcurrencyconverter.ui.theme
+package br.com.maschdy.vwcurrencyconverter.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
