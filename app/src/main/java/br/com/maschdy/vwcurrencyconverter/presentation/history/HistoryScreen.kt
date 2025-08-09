@@ -23,16 +23,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import br.com.maschdy.vwcurrencyconverter.presentation.theme.VWCurrencyConverterTheme
 
 @Composable
 fun HistoryScreen(
+    navController: NavController = rememberNavController(),
     viewModel: HistoryViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     fun onBackClick() {
-
+        navController.navigateUp()
     }
 
     Column(
@@ -44,7 +47,7 @@ fun HistoryScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(vertical = 16.dp)
         ) {
             IconButton(onClick = { onBackClick() }) {
                 Icon(
@@ -66,21 +69,21 @@ fun HistoryScreen(
             ) {
                 CircularProgressIndicator()
             }
-        }
-
-        if (uiState.errorMessage.isNotEmpty()) {
-            Text(
-                text = uiState.errorMessage,
-                color = MaterialTheme.colorScheme.error
-            )
-        }
-
-        if (uiState.items.isNotEmpty()) {
-            HistoryList(uiState.items)
         } else {
-            Text(
-                text = "Nenhuma conversão realizada até momento.",
-            )
+            if (uiState.errorMessage.isNotEmpty()) {
+                Text(
+                    text = uiState.errorMessage,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+            if (uiState.items.isNotEmpty()) {
+                HistoryList(uiState.items)
+            } else {
+                Text(
+                    text = "Nenhuma conversão realizada até momento.",
+                )
+            }
         }
     }
 }
