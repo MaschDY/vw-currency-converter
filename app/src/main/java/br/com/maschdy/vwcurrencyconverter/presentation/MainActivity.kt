@@ -7,6 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,7 +25,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            VWCurrencyConverterTheme {
+            var isDarkMode by remember { mutableStateOf(false) }
+
+            VWCurrencyConverterTheme(isDarkMode) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -32,7 +38,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.ConverterScreen.route
                     ) {
                         composable(Screen.ConverterScreen.route) {
-                            ConverterScreen(navController)
+                            ConverterScreen(navController, onDarkThemeChange = { isDarkMode = it })
                         }
                         composable(Screen.HistoryScreen.route) {
                             HistoryScreen(navController)

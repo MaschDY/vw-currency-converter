@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
@@ -19,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -47,12 +50,14 @@ fun ConverterScreen(
     viewModel: ConverterViewModel = koinViewModel(),
     fromOptions: List<String> = currencyCodes,
     toOptions: List<String> = currencyCodes,
+    onDarkThemeChange: (isDarkMode: Boolean) -> Unit = {}
 ) {
     var value by remember { mutableStateOf("") }
     var actualCurrency by remember { mutableStateOf("") }
     var targetCurrency by remember { mutableStateOf("") }
     var expandedActualCurrency by remember { mutableStateOf(false) }
     var expandedTargetCurrency by remember { mutableStateOf(false) }
+    var isDarkMode by remember { mutableStateOf(false) }
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -94,6 +99,24 @@ fun ConverterScreen(
                 )
             },
             actions = {
+                Switch(
+                    modifier = Modifier.padding(end = 6.dp),
+                    checked = isDarkMode,
+                    onCheckedChange = {
+                        isDarkMode = it
+                        onDarkThemeChange(isDarkMode)
+                    },
+                    thumbContent = {
+                        val icon = remember(isDarkMode) {
+                            if (isDarkMode) {
+                                Pair(Icons.Filled.DarkMode, "Modo Noturno")
+                            } else {
+                                Pair(Icons.Filled.LightMode, "Modo Claro")
+                            }
+                        }
+                        Icon(icon.first, icon.second)
+                    }
+                )
                 TextButton(onClick = { onHistoryClick() }) {
                     Icon(
                         imageVector = Icons.Default.History,
